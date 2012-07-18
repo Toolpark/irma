@@ -32,6 +32,7 @@ exports.init = function (y, config, messages, cron, logger) {
 		dataDir,
 		app,
 		authCheck,
+		merchantBooking,
 		purchaseItem,
 		tallyCarryOver,
 		archiveAll,
@@ -107,6 +108,47 @@ exports.init = function (y, config, messages, cron, logger) {
 		callback();
 	};
 
+	merchantBooking = function (userId, userBooking) {
+		var account, booking, type, name, originalBooking;
+
+		account = accounts.get(config.kiosk.merchant_user);
+
+		if (userBooking.type() === 'reverse') {
+			originalBooking = account.bookingByRelatedBookingId(userBooking.id());
+			account.reverse(originalBooking.id(), function (err, bookingId) {
+				kioskLogger.log(userId, account, account.booking(bookingId));
+			});
+
+
+		} else {
+			if (userBooking.type() === 'purchase' || userBooking.type() === 'tally carry over') {
+				type = 'sell';
+				name = '[sell] ' + userBooking.name();
+			}
+
+			if (userBooking.type() === 'stock') {
+				type = 'buy';
+				name = '[buy] ' + userBooking.name();
+			}
+			
+			booking = new Booking({
+				'id' : bookings.uuid(),
+				'itemId' : userBooking.itemId(),
+				'time' : Date.now(),
+				'amount' : userBooking.amount() * -1,
+				'name' : name,
+				'description' : name,
+				'type' : type,
+				'relatedBookingId' : userBooking.id()
+			});
+
+			account.book(booking, function (err, bookingId) {
+				kioskLogger.log(userId, account, account.booking(bookingId));
+			});
+		}
+
+	};
+
 	purchaseItem = function (userId, itemId, callback) {
 		var account, item, booking;
 
@@ -148,7 +190,7 @@ exports.init = function (y, config, messages, cron, logger) {
 
 		booking = new Booking({
 			'id' : bookings.uuid(),
-			'itemId' : null,
+			'itemId' : rec.item.id(),
 			'time' : Date.now(),
 			'amount' : rec.total * -1,
 			'name' : rec.marks + ' x ' + rec.item.name(),
@@ -243,6 +285,8 @@ exports.init = function (y, config, messages, cron, logger) {
 
 				res.redirect('/paid/' + bookingId);
 				kioskLogger.log(userId, account, account.booking(bookingId));
+
+				merchantBooking(userId, account.booking(bookingId));
 			});
 		});
 	});
@@ -278,6 +322,7 @@ exports.init = function (y, config, messages, cron, logger) {
 
 				res.redirect('/account');
 				kioskLogger.log(userId, account, account.booking(bookingId));
+				merchantBooking(userId, account.booking(bookingId));
 			});
 		});
 	});
@@ -464,6 +509,8 @@ exports.init = function (y, config, messages, cron, logger) {
 				}
 
 				kioskLogger.log(userId, account, account.booking(bookingId));
+
+				merchantBooking(userId, account.booking(bookingId));
 			});
 
 		});
@@ -644,6 +691,7 @@ exports.init = function (y, config, messages, cron, logger) {
 						var stock, text;
 
 						kioskLogger.log(userId, account, account.booking(bookingId));
+						merchantBooking(userId, account.booking(bookingId));
 						bookings.push(account.booking(bookingId));
 
 						if (rec.item.isStockable()) {

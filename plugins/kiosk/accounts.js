@@ -103,6 +103,20 @@ Account.prototype.booking = function (bookingId) {
 	return new Booking(booking);
 };
 
+Account.prototype.bookingByRelatedBookingId = function (relatedBookingId) {
+	var booking;
+
+	for (var i = 0; i < this._bookings.length; i++) {
+		booking = this._bookings[i];
+		console.log(relatedBookingId, booking);
+		if (booking.relatedBookingId && booking.relatedBookingId === relatedBookingId) {
+			return new Booking(booking);
+		}
+	}
+
+	return null;
+};
+
 Account.prototype.bookings = function () {
 	var bookings = [];
 	for (var i = 0; i < this._bookings.length; i++) {
