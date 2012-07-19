@@ -108,7 +108,6 @@ Account.prototype.bookingByRelatedBookingId = function (relatedBookingId) {
 
 	for (var i = 0; i < this._bookings.length; i++) {
 		booking = this._bookings[i];
-		console.log(relatedBookingId, booking);
 		if (booking.relatedBookingId && booking.relatedBookingId === relatedBookingId) {
 			return new Booking(booking);
 		}

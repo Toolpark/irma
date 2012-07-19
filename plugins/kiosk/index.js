@@ -108,12 +108,13 @@ exports.init = function (y, config, messages, cron, logger) {
 		callback();
 	};
 
-	merchantBooking = function (userId, userBooking) {
+	merchantBooking = function (userId, userBooking, reverse) {
 		var account, booking, type, name, originalBooking;
 
+		if (typeof reverse === 'undefined') { reverse = false; }
 		account = accounts.get(config.kiosk.merchant_user);
 
-		if (userBooking.type() === 'reverse') {
+		if (reverse) {
 			originalBooking = account.bookingByRelatedBookingId(userBooking.id());
 			account.reverse(originalBooking.id(), function (err, bookingId) {
 				kioskLogger.log(userId, account, account.booking(bookingId));
@@ -322,7 +323,7 @@ exports.init = function (y, config, messages, cron, logger) {
 
 				res.redirect('/account');
 				kioskLogger.log(userId, account, account.booking(bookingId));
-				merchantBooking(userId, account.booking(bookingId));
+				merchantBooking(userId, account.booking(oldBooking.id()), true);
 			});
 		});
 	});
