@@ -24,7 +24,7 @@
 		"natural" : "*",
 		"aspsms" : "*",
 		"fancy-timestamp" : "*",
-		"revjsion" : "git://github.com/maxkueng/revjsion.git"
+		"revjsion" : "https://github.com/manuelstofer/revjsion.git"
 	},
 	"devDependencies": {
 		"jslint" : "*"
