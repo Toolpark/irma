@@ -80,10 +80,10 @@ exports.init = function (y, config, messages, cron, logger) {
 	viewsDir = path.join(pluginDir, 'views');
 	dataDir = path.join(pluginDir, 'data');
 
-	if (!path.existsSync(pluginDir)) { fs.mkdirSync(pluginDir, '0777'); }
-	if (!path.existsSync(publicDir)) { fs.mkdirSync(publicDir, '0777'); }
-	if (!path.existsSync(viewsDir)) { fs.mkdirSync(viewsDir, '0777'); }
-	if (!path.existsSync(dataDir)) { fs.mkdirSync(dataDir, '0777'); }
+	if (!fs.existsSync(pluginDir)) { fs.mkdirSync(pluginDir, '0777'); }
+	if (!fs.existsSync(publicDir)) { fs.mkdirSync(publicDir, '0777'); }
+	if (!fs.existsSync(viewsDir)) { fs.mkdirSync(viewsDir, '0777'); }
+	if (!fs.existsSync(dataDir)) { fs.mkdirSync(dataDir, '0777'); }
 
 	items.dataDir = dataDir;
 	items.load();

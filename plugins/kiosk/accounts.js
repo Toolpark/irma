@@ -17,7 +17,7 @@ var Account = function (userId) {
 Account.prototype._load = function () {
 	if (this._bookings) { return; }
 
-	if (path.existsSync(this._accountFile)) {
+	if (fs.existsSync(this._accountFile)) {
 		var data = fs.readFileSync(this._accountFile, 'UTF-8');
 		this._bookings = JSON.parse(data);
 
@@ -204,7 +204,7 @@ Account.prototype.archive = function (callback) {
 	do {
 		archFile = path.join(exports.dataDir, this._userId + '_' + now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + i + '.json');
 		i++;
-	} while (path.existsSync(archFile));
+	} while (fs.existsSync(archFile));
 
 	this._persist(archFile, function (err) {
 		self._bookings = [];

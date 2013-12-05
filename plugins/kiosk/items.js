@@ -14,7 +14,7 @@ var load = function () {
 
 	filePath = path.join(exports.dataDir, 'items.json');
 
-	if (path.existsSync(filePath)) {
+	if (fs.existsSync(filePath)) {
 		data = fs.readFileSync(filePath, 'UTF-8');
 		itemIds = JSON.parse(data);
 
@@ -24,7 +24,7 @@ var load = function () {
 
 	for (var i = 0; i < itemIds.length; i++) {
 		itemFilePath = path.join(exports.dataDir, 'item-' + itemIds[i] + '.json');
-		if (path.existsSync(itemFilePath)) {
+		if (fs.existsSync(itemFilePath)) {
 			itemData = JSON.parse(fs.readFileSync(itemFilePath, 'UTF-8'));
 			item = new Item(itemData);
 			items[item.id()] = item;

@@ -24,7 +24,7 @@ var Yammer = require('../lib/yammer').Yammer;
 var cwd = process.cwd();
 
 var load_config = function () {
-	if (path.existsSync(cwd + '/config.json')) {
+	if (fs.existsSync(cwd + '/config.json')) {
 		var config_data = fs.readFileSync(cwd + '/config.json', 'utf8');
 		return JSON.parse(config_data);
 	}

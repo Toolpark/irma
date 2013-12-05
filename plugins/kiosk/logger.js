@@ -52,7 +52,7 @@ var init = function (users) {
 	if (!exports.dataDir) { return; }
 
 	logFilePath = path.join(exports.dataDir, logFile);
-	if (path.existsSync(logFilePath)) {
+	if (fs.existsSync(logFilePath)) {
 		data = fs.readFileSync(logFilePath, 'utf8');
 		entries = JSON.parse(data);
 		initialized = true;

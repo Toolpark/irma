@@ -16,7 +16,7 @@ var Stock = function (itemId) {
 Stock.prototype._load = function () {
 	if (this._updates) { return; }
 
-	if (path.existsSync(this._stockFile)) {
+	if (fs.existsSync(this._stockFile)) {
 		var data = fs.readFileSync(this._stockFile, 'UTF-8');
 		this._updates = JSON.parse(data);
 		return;
