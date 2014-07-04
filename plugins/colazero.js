@@ -29,8 +29,10 @@ exports.init = function (y, config, messages, cron, logger) {
 	messages.add('colazero_ask', "I have already ordered new beverages [diff], as instructed by [user]. \nAre you sure you want me to order coke again?");
 	messages.add('colazero_ask', "Whaaaat?? The last order wasn't even [diff]. \nDo I really have to order again?");
 	messages.add('colazero_ask', "Na na na.. are you sure? The last order wasn't even [diff]. \nDo I really have to order again?");
-	messages.add('colazero_buy_complete', "Woop woop! I have just ordered a whole bunch of coke for us all.");
+	messages.add('colazero_ask', "Again?? Wow you people drink like an SUV. Last time wasn't even [diff]. \nDo I really have to order again?");
+	messages.add('colazero_buy_complete', "Woop woop! Get ready! Beverages are on their way.");
 	messages.add('colazero_buy_complete', "Affirmative, new coke is on the way. Thanks!");
+	messages.add('colazero_buy_complete', "Alright, you thirsty monkeys. New coke is coming soon.");
 	messages.add('colazero_abort', "Okay, I'm not ordering anything.");
 	messages.add('colazero_abort', "Uhh, thank you! I'm so fed up ordering coke all the time.");
 	messages.add('colazero_list', "Here's a list of the last 10 coke orders:\n\n[list]");
@@ -365,8 +367,7 @@ exports.init = function (y, config, messages, cron, logger) {
 				'from' : fromEmail,
 				'to' : config.colazero.mail_to,
 				'subject' : config.colazero.mail_subject,
-				//'text' : config.colazero.mail_text
-				'text' : JSON.stringify(u._data, null, '  ')
+				'text' : config.colazero.mail_text
 			};
 
 		mailTransport.sendMail(mailOptions, function (err) {
