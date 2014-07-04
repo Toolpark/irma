@@ -24,9 +24,11 @@ exports.init = function (y, config, messages, cron, logger) {
 		});
 
 	messages.add('colazero_not_understood', "Sorry, I didn't get it. Please rephase.");
+	messages.add('colazero_not_understood', "Sorry, what?");
 	messages.add('colazero_email_error', "Oh motherf&*#*@☠☆!! I failed to send the email. Must be some misconfiguration or a problem with the mail server.");
 	messages.add('colazero_ask', "I have already ordered new beverages [diff], as instructed by [user]. \nAre you sure you want me to order coke again?");
 	messages.add('colazero_ask', "Whaaaat?? The last order wasn't even [diff]. \nDo I really have to order again?");
+	messages.add('colazero_ask', "Na na na.. are you sure? The last order wasn't even [diff]. \nDo I really have to order again?");
 	messages.add('colazero_buy_complete', "Woop woop! I have just ordered a whole bunch of coke for us all.");
 	messages.add('colazero_buy_complete', "Affirmative, new coke is on the way. Thanks!");
 	messages.add('colazero_abort', "Okay, I'm not ordering anything.");
@@ -363,7 +365,8 @@ exports.init = function (y, config, messages, cron, logger) {
 				'from' : fromEmail,
 				'to' : config.colazero.mail_to,
 				'subject' : config.colazero.mail_subject,
-				'text' : config.colazero.mail_text
+				//'text' : config.colazero.mail_text
+				'text' : JSON.stringify(u._data, null, '  ')
 			};
 
 		mailTransport.sendMail(mailOptions, function (err) {
