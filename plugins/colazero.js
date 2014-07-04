@@ -134,6 +134,13 @@ exports.init = function (y, config, messages, cron, logger) {
 	commandClassifier.addDocument('Buy cola zero', 'buy');
 	commandClassifier.addDocument('Buy cokezero', 'buy');
 	commandClassifier.addDocument('Buy colazero', 'buy');
+	commandClassifier.addDocument('Order coke', 'buy');
+	commandClassifier.addDocument('Order cola', 'buy');
+	commandClassifier.addDocument('Order coca cola', 'buy');
+	commandClassifier.addDocument('Order coke zero', 'buy');
+	commandClassifier.addDocument('Order cola zero', 'buy');
+	commandClassifier.addDocument('Order cokezero', 'buy');
+	commandClassifier.addDocument('Order colazero', 'buy');
 	commandClassifier.addDocument('Coke is empty', 'buy');
 	commandClassifier.addDocument('Cola is empty', 'buy');
 	commandClassifier.addDocument('Coca cola is empty', 'buy');
@@ -344,13 +351,16 @@ exports.init = function (y, config, messages, cron, logger) {
 
 	var buy = function (message, callback) {
 		console.log('buy');
+		var u = y.user(message.senderId());
+		var fromEmail = u.email() || config.colazero.mail_from;
+
 		var now = moment(),
 			order = {
 				'timestamp' : now.unix(),
 				'userId' : message.senderId()
 			},
 			mailOptions = {
-				'from' : config.colazero.mail_from,
+				'from' : fromEmail,
 				'to' : config.colazero.mail_to,
 				'subject' : config.colazero.mail_subject,
 				'text' : config.colazero.mail_text
